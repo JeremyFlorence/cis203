@@ -1,0 +1,117 @@
+/*
+  Name: Jeremy Florence
+  Course: CIS 203 - Computer Science II
+  Assignment: 6
+  Due: 3/14/14
+*/
+
+import java.io.*;
+import java.util.*;
+/*
+public class BinSort {
+    private static ArrayList<Integer> [] bin;
+  
+    public static void main(String [] args) throws FileNotFoundException {
+	String fileName = args[0];
+	Scanner fileInput = new Scanner(new File(fileName));
+	int maxDigit = fileInput.nextInt();
+	int size = fileInput.nextInt();
+	int [] values = readValues(fileInput, size);
+	getBin(values, maxDigit);
+	System.out.println(Arrays.toString(values));
+	values = sort(values, maxDigit);
+	
+	
+	System.out.println(Arrays.toString(values));
+    }
+
+    public static int [] readValues(Scanner fileInput, int size) {
+	int [] values = new int [size];
+	for (int i = 1; i < size; i++) {
+	    values[i] = fileInput.nextInt();
+	}
+	return values;
+    }
+    
+    public static void getBin(int [] values, int maxDigit) {
+	bin = (ArrayList<Integer>[]) new ArrayList[10];
+	for(int i = 0; i < bin.length; i++) {
+	    bin[i] = new ArrayList<Integer>();
+	}
+    }
+    
+    public static int [] sort(int [] values,int maxDigit) {
+	int powerTen = 10;
+	for (int i = 0; i < maxDigit + 1; i++) {
+	    for (int v : values) {
+		int digit = (v % powerTen) / (powerTen / 10);
+		bin[digit].add(v);
+	    }
+	    System.out.println("Bin: " + Arrays.toString(bin));
+	    for (int j = 0; j < 10; j++) {
+		int z = 0;
+		while(bin[j].size() > 0) {
+		    values[z] = bin[j].get(0);
+		    bin[j].remove(0);
+		    z++;
+		}
+	    }
+	    
+	    powerTen *= 10;
+	}
+	return values;
+    }
+}
+    */
+
+public class BinSort {
+    
+    public static void main(String [] args) throws FileNotFoundException {
+	String fileName = args[0];
+	Scanner fileInput = new Scanner(new File(fileName));
+	int maxDigit = fileInput.nextInt();
+	int size = fileInput.nextInt();
+	int [] values = readValues(fileInput, size);
+	System.out.println("Unsorted: " + Arrays.toString(values));
+	values = sort(values, maxDigit);
+	System.out.println("Sorted: " + Arrays.toString(values));
+	
+    }
+    
+    public static int [] readValues(Scanner fileInput, int size) {
+	int [] values = new int [size];
+	for (int i = 1; i < size; i++) {
+	    values[i] = fileInput.nextInt();
+	}
+	return values;
+    }
+    
+    public static int [] sort(int [] values, int maxDigit) {
+	ArrayList<Integer> [] bin = getBin();
+	int powTen = 10;
+	for(int i = 0; i < maxDigit + 1; i++) {
+	    for(int v : values) {
+		int digit = (v % powTen) / (powTen / 10);
+		bin[digit].add(v);
+	    }
+	    int index = 0;
+	    for(int j = 0; j < bin.length; j++) {
+		while(bin[j].size() > 0) {
+		    values[index] = bin[j].get(0);
+		    bin[j].remove(0);
+		    index++;
+		}
+	    }
+	    powTen *= 10;
+	}
+	return values;
+    }
+    
+    public static ArrayList<Integer> [] getBin() {
+	ArrayList<Integer> [] bin = (ArrayList<Integer>[]) new ArrayList[10];
+	for(int i = 0; i < bin.length; i++) {
+	    bin[i] = new ArrayList<Integer>();
+	}
+	return bin;
+    }
+}

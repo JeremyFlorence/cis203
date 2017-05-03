@@ -1,0 +1,164 @@
+/*
+    Name: Jeremy Florence
+    Course: CIS 203 - Computer Science II
+    Assignment: 3
+    Due: 2/14/14
+*/
+
+// This is the class for the LetterInventory object which has 2 fields,
+// an integer(size) and an ArrayList of integers(lettersCount) to store 
+// how many of each letter in the alphabet are in a string.
+import java.util.*;
+public class LetterInventory {
+    // Fields
+    ArrayList<Integer> lettersCount;
+    int size;
+    
+    // Class Methods
+    // Parameter: s1 - a string.
+    // Parameter: s2 - another string.
+    // Returns: True if the two strings are anagrams of eachother.
+    public static boolean anagrams(String s1, String s2) {
+	return new LetterInventory(s1).equals(new LetterInventory(s2));
+    }
+    
+    // Constructors
+    // Returns: a LetterInventory with the letter counts and size
+    // 		initialized to zero.
+    public LetterInventory() {
+	this.lettersCount = new ArrayList<Integer>(26);
+	for(int i = 0; i < 26; i++) {
+	    this.lettersCount.add(0);
+	}
+	this.size = 0;
+	
+    }
+    
+    // Parameter: data - a string to count the letters of.
+    // Returns: a LetterInventory for a passed string.
+    public LetterInventory(String data) {
+	this();
+	for(int i = 0; i < data.length(); i++) {
+	    char ch = data.charAt(i);
+	    if(!isLetter(ch)) {
+		continue;
+	    }
+	    this.set(ch, this.get(ch) + 1);
+	}
+	
+    }
+    
+    // Parameter: other - another LetterInventory.
+    // Returns: a new LetterInventory object representing the difference
+    // 		of the letter counts between two LetterInventories.
+    public LetterInventory subtract(LetterInventory other) {
+	LetterInventory difference = new LetterInventory();
+	for(int i = 'a'; i < 'z'; i++) {
+	    int value = this.get((char)i) - other.get((char)i);
+	    if(value < 0) {
+		return null;
+	    }
+	    difference.set((char)i, value);
+	}
+	return difference;
+	
+    }
+    
+    // Parameter: other - another LetterInventory.
+    // Returns: a new LetterInventory object representing the sum
+    // 		of the letter counts of two LetterInventories.
+    public LetterInventory add(LetterInventory other) {
+	LetterInventory sum = new LetterInventory();
+	for (int i = 'a'; i < 'z'; i++) {
+	    int value = this.get((char)i) + other.get((char)i);
+	    sum.set((char)i, value);
+	}
+	return sum;
+    }
+    
+    // Parameter: letter - a character.
+    // Returns: the count value for a letter.
+    public int get(char letter) {
+	if(!isLetter(letter)) {
+	    throw new IllegalArgumentException();
+	}
+	int index = (int)(toLowerCase(letter) - 'a');
+	return this.lettersCount.get(index);
+    }
+    
+    // Returns: the sum of the counts.
+    public int size() {
+	return this.size;
+    }
+    
+    // Returns: True if the LetterInventory is empty.
+    public boolean isEmpty() {
+	return size == 0;
+    }
+    
+    // Parameter: Obj - an object.
+    // Returns: True if the LetterInventories are identical.
+    public boolean equals (Object obj) {
+	if (!(obj instanceof LetterInventory)) {
+	    return false;
+	}
+	
+	LetterInventory let = (LetterInventory)obj;
+	if (this.size != let.size) {
+	    return false;
+	}
+	
+	for(int i = 'a'; i < 'z'; i++) {
+	    if(this.get((char)i) != let.get((char)i)) {
+		return false;
+	    }
+	}
+	
+	return true;
+    }
+
+    // Parameter: letter - a letter.
+    // Returns: True if letter is upper case.
+    private boolean isUpperCase(char letter) {
+	return (letter >= 'A' && letter <= 'Z');
+    }
+    
+    // Parameter: ch - a character.
+    // Returns: True if ch is a letter in the alphabet.
+    private boolean isLetter(char ch) {
+	return(toLowerCase(ch) >= 'a' && toLowerCase(ch) <= 'z');
+    }
+    
+    // Parameter: letter - a letter.
+    // Returns: a lower case letter.
+    private char toLowerCase(char letter) {
+	if (isUpperCase(letter)) {
+	    return (char)(letter - 'A' + 'a');
+	}
+	return letter;
+    }
+    
+    // Returns: A string representation of the LetterInventory.
+    public String toString() {
+	String s = "[";
+	for(int i = 0; i < this.lettersCount.size(); i++) {
+	    for(int j = 0; j < this.lettersCount.get(i); j++) {
+		s += (char)('a' + i);
+	    }
+	}
+	return s + "]";
+    }
+    
+    // Parameter: letter - a letter.
+    // Parameter: value - a count value for a letter.
+    // Postcondition: the count for a passed letter is changed to the
+    // 			passed value.
+    public void set(char letter, int value) {
+	int index = (int)(toLowerCase(letter) - 'a');
+	if(!isLetter(letter) || value < 0) {
+	    throw new IllegalArgumentException();
+	}
+	this.size += value - this.lettersCount.get(index);
+	this.lettersCount.set(index, value);
+    }
+}
